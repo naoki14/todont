@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>To-Don't</title>
+    <link rel='stylesheet' href='../css/todont.css' />
+  </head>
+  <body> <script src="../js/todont.js"></script>
+
+<section id='todo-form-area'>
+        <form name='todo-form' id='todo-form' method='POST'>
+                <label for='todo-item-text'>
+                        To-Don't
+                </label>
+                <input type="text" name='todo-item-text' id='todo-item-text' maxlength="280">
+                <select name='todo-item-priority' id='todo-item-priority'>
+                        <option value='High'>High</option>
+                        <option value='Normal' selected>Normal</option>
+                        <option value='Low'>Low</option>
+                </select>
+                <input type="submit" name='todo-item-submit' id='todo-item-submit' value='Add'>
+        </form>
+</section>
+<section id='todo-list-area'>
+        <ul id='todo-list'>
+                <li class='placeholder-item'>
+                        <span class='todo-item-priority'>[Normal]</span>
+                        <span class='todo-item-text'>Never stand between a dog and a fire hydrant.</span>
+                </li>
+                <li class='placeholder-item'>
+                        <span class='todo-item-priority'>[Normal]</span>
+                        <span class='todo-item-text'>Never play cards with a man named Doc.</span>
+                </li>
+                <li class='placeholder-item'>
+                        <span class='todo-item-priority'>[Normal]</span>
+                        <span class='todo-item-text'>Never spit into the wind.</span>
+                </li>
+                <li class='placeholder-item'>
+                        <span class='todo-item-priority'>[Normal]</span>
+                        <span class='todo-item-text'>Never insult an alligator until after you have crossed the river.</span>
+                </li>
+                <li class='placeholder-item'>
+                        <span class='todo-item-priority'>[Normal]</span>
+                        <span class='todo-item-text'>Never poke a bear with a stick.</span>
+                </li>
+	</ul>
+</section>
+
+<template id='todo-item-template'>
+        <li class='todo-item'>
+                [<span class='todo-item-priority'>Normal</span>]
+                <span class='todo-item-text'>Lorem Ipsum</span>
+        </li>
+</template>
+
+  </body>
+</html>
