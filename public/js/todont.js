@@ -11,9 +11,11 @@ function main() {
     default_items = id('todo-list').innerHTML;
 
     document.getElementById('todo-form').onsubmit = (event) => {
+        event.preventDefault();
+
         processFormSubmit(event);
 
-        // return false;
+        return false;
     }
 }
 
@@ -23,9 +25,21 @@ function processFormSubmit(event) {
     if (text !== '' && text !== 'clear') {
         let priority = id('todo-item-priority').value;
         console.log(`New item: ${text} ${priority}`);
-        local_items.push({
+        const data = {
             text: text,
             priority: priority
+        };
+        local_items.push(data);
+        fetch('http://65.52.233.112/add_todont', {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {"Content-Type": "application/json"}
+        }).then((response) => {
+            return response.json();
+        }).then((res) => {
+            console.log(res);
+        }).catch ((err) => {
+            console.log(err);
         });
         render();
     }
