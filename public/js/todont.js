@@ -9,8 +9,12 @@ document.querySelector("body").onload = main;
 
 function main() {
     default_items = id('todo-list').innerHTML;
+    // get the items from the server as soon as the page loads
+    getTodontItems();
 
     document.getElementById('todo-form').onsubmit = (event) => {
+        // preventDefault() stops the browser's default behavior of
+        // sending the form data and refreshing the page
         event.preventDefault();
 
         processFormSubmit(event);
@@ -19,7 +23,7 @@ function main() {
     }
 }
 
-function processFormSubmit(event) {
+async function processFormSubmit(event) {
     const text = id('todo-item-text').value;
     id('todo-item-text').value = '';
     if (text !== '' && text !== 'clear') {
@@ -31,16 +35,16 @@ function processFormSubmit(event) {
         };
         local_items.push(data);
         fetch('http://65.52.233.112/add_todont', {
-            method: 'post',
+            method: 'POST',
             body: JSON.stringify(data),
             headers: {"Content-Type": "application/json"}
-        }).then((response) => {
-            return response.json();
-        }).then((res) => {
-            console.log(res);
-        }).catch ((err) => {
+        }).then( res => {
+            // just log the status for now
+            return console.log(res.status);
+        }).catch( err=> {
             console.log(err);
         });
+     
         render();
     }
 }
@@ -55,4 +59,22 @@ function render() {
         new_li.querySelector('.todo-item-priority').textContent = local_items[i].priority;
         list_elt.appendChild(new_li);
     }
+}
+
+function getTodontItems () {
+    fetch('http://65.52.233.112/todont_items', {
+        method: 'GET'
+    }).then( res => {
+        return res.json();
+    }).then( data => {
+        // log the data
+        console.log(data);
+        // overwrite local_items with the array of todont items
+        // recieved from the server
+        local_items = data.todont_items;
+        // render the list of items received from the server
+        render();
+    }).catch( err => {
+        console.log(err);
+    });
 }

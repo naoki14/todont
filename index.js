@@ -2,6 +2,8 @@ const express = require('express');
 const app     = express();
 const path    = require('path');
 
+// In-memory array used to store all todont items being sent to
+// the server.
 let todont_array = [];
 
 // Gives direct access to GET files from the
@@ -15,38 +17,22 @@ app.use(express.json());
 
 // Default route
 app.get('/', (req, res) => {
-    console.log("GET [/]");
-    let data = {
-        query: req.query, // encoded in the url
-        body: req.body,   // sent in body
-        params: req.params, //
-        ip: req.ip,
-    };
-    console.log(data);
-    res.send(JSON.stringify(data));
-});
-
-// Create a route for POST requests 
-app.post('/html/todont.html', (req, res) => {
-    console.log("POST [/html/todont.html]")
-    let data = {
-        query: req.query,   // data passed directly the URL query string
-        body: req.body,     // data passed from the request body (automatically sent via browser)
-        params: req.params, // data captured from named url parameters (see notes on this)
-    };
-    console.log(data);
-    res.send(JSON.stringify(data));
+    res.redirect('/todont_list');
 });
 
 app.get("/todont_list", (req, res) => {
     res.sendFile(path.join(__dirname, '/public/html/todont.html'));
 });
 
+app.get("/todont_items", (req, res) => {
+    res.send(JSON.stringify({todont_items: todont_array}));
+});
+
 app.post("/add_todont", (req, res) => {
     const data = req.body;
     console.log(data);
     todont_array.push(data);
-    res.send(JSON.stringify(todont_array));
+    res.sendStatus(200);
 });
 
 // Listen on port 80 (Default HTTP port)
