@@ -1,6 +1,11 @@
 const express = require('express');
 const app     = express();
 const path    = require('path');
+const createDAO   = require('./Models/dao');
+const TodontModel = require('./Models/TodontModel');
+
+const dbFilePath = process.env.DB_FILE_PATH || path.join(__dirname, 'Database', 'Todont.db');
+let Todont = undefined;
 
 // In-memory array used to store all todont items being sent to
 // the server.
@@ -25,17 +30,41 @@ app.get("/todont_list", (req, res) => {
 });
 
 app.get("/todont_items", (req, res) => {
-    res.send(JSON.stringify({todont_items: todont_array}));
+    Todont.getAll()
+        .then( (rows) => {
+            console.log(rows);
+            // remember to change index.js
+            res.send(JSON.stringify({todont_items: rows}));
+        })
+        .catch( err => {
+            console.error(err);
+            res.sendStatus(500);
+        })
 });
 
 app.post("/add_todont", (req, res) => {
     const data = req.body;
     console.log(data);
-    todont_array.push(data);
-    res.sendStatus(200);
+    // todont_array.push(data);
+    Todont.add(data.text, data.priority)
+        .then( () => {
+            res.sendStatus(200);
+        }).catch( err => {
+            console.error(err);
+            res.sendStatus(500);
+        });
 });
 
 // Listen on port 80 (Default HTTP port)
-app.listen(80, () => {
+app.listen(80, async () => {
+    // wait until the db is initialized and all models are initialized
+    await initDB();
+    // Then log that the we're listening on port 80
     console.log("Listening on port 80.");
 });
+
+async function initDB () {
+    const dao = await createDAO(dbFilePath);
+    Todont = new TodontModel(dao);
+    await Todont.createTable();
+}
