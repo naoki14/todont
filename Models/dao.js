@@ -24,6 +24,7 @@ async function createDAO (dbFilePath) {
     const db = await createDB(dbFilePath);
     db.run = util.promisify(db.run);
     db.all = util.promisify(db.all);
+    db.get = util.promisify(db.get);
     return db;
 }
 

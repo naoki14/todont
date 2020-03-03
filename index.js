@@ -3,9 +3,13 @@ const app     = express();
 const path    = require('path');
 const createDAO   = require('./Models/dao');
 const TodontModel = require('./Models/TodontModel');
+const UserModel   = require('./Models/UserModel');
+const AuthController = require('./Controllers/AuthController');
 
 const dbFilePath = process.env.DB_FILE_PATH || path.join(__dirname, 'Database', 'Todont.db');
 let Todont = undefined;
+let Auth = undefined;
+
 
 // In-memory array used to store all todont items being sent to
 // the server.
@@ -22,6 +26,7 @@ app.use(express.json());
 
 // Default route
 app.get('/', (req, res) => {
+    console.log(req.ip);
     res.redirect('/todont_list');
 });
 
@@ -55,6 +60,26 @@ app.post("/add_todont", (req, res) => {
         });
 });
 
+app.get("/register", async (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "html", "register.html"));
+});
+
+app.post("/register", async (req, res) => {
+    const body = req.body;
+    console.log(body);
+    if (body === undefined || (!body.username || !body.password)) {
+        return res.sendStatus(400);
+    }
+    const {username, password} = body;
+    try {
+        await Auth.register(username, password);
+        res.sendStatus(200);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+});
+
 // Listen on port 80 (Default HTTP port)
 app.listen(80, async () => {
     // wait until the db is initialized and all models are initialized
@@ -67,4 +92,7 @@ async function initDB () {
     const dao = await createDAO(dbFilePath);
     Todont = new TodontModel(dao);
     await Todont.createTable();
+    Users = new UserModel(dao);
+    await Users.createTable();
+    Auth = new AuthController(dao);
 }
