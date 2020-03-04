@@ -14,12 +14,25 @@ class AuthController {
     async hashPassword (password) {
         const hash = await argon2.hash(password, {
             type: argon2.argon2id,
-            memoryCost: 2 ** 16, // 2^16 MiB
+            memoryCost: 2 ** 16, // ~4 MiB
             hashLength: 32,      // 32 byte hash (encoded in base64 so it's actually 1/3 longer)
             timeCost: 3,         // Takes ~220ms on our machines
             parallelism: 1,      // We have 1 core machines so we can't parallelize any more
         })
         return hash;
+    }
+
+    // Call this function to authenticate a user using a username and password
+    // this function is asynchronous so it returns a promise
+    // you need to implement the getPasswordHash() function in the UserModel class
+    async login (username, password) {
+        const password = await this.UserModel.getPasswordHash(username);
+        const isVerified = await this.verifyPassword(passwordHash, password);
+        return isVerified;
+    }
+
+    async verifyPassword (passwordHash, password) {
+        return await argon2.verify(passwordHash, password);
     }
 }
 

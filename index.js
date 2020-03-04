@@ -80,6 +80,10 @@ app.post("/register", async (req, res) => {
     }
 });
 
+app.post('/login', (req, res) => {
+
+});
+
 // Listen on port 80 (Default HTTP port)
 app.listen(80, async () => {
     // wait until the db is initialized and all models are initialized
