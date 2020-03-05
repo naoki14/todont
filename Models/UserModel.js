@@ -17,7 +17,7 @@ class UserModel {
         const sql = `INSERT INTO Users (username, passwordHash) VALUES (?, ?)`;
         // Username needs to be unique so this will throw an exception if we 
         // attempt to add a user that already exists
-        this.DAO.run(sql, [username, passwordHash]);
+        await this.DAO.run(sql, [username, passwordHash]);
     }
 }
 

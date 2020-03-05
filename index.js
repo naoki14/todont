@@ -10,11 +10,6 @@ const dbFilePath = process.env.DB_FILE_PATH || path.join(__dirname, 'Database', 
 let Todont = undefined;
 let Auth = undefined;
 
-
-// In-memory array used to store all todont items being sent to
-// the server.
-let todont_array = [];
-
 // Gives direct access to GET files from the
 // "public" directory (you can name the directory anything)
 app.use(express.static('public'));
@@ -50,7 +45,6 @@ app.get("/todont_items", (req, res) => {
 app.post("/add_todont", (req, res) => {
     const data = req.body;
     console.log(data);
-    // todont_array.push(data);
     Todont.add(data.text, data.priority)
         .then( () => {
             res.sendStatus(200);
@@ -78,10 +72,6 @@ app.post("/register", async (req, res) => {
         console.error(err);
         res.sendStatus(500);
     }
-});
-
-app.post('/login', (req, res) => {
-
 });
 
 // Listen on port 80 (Default HTTP port)
