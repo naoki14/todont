@@ -18,9 +18,38 @@ function main() {
         event.preventDefault();
 
         processFormSubmit(event);
-
+        
         return false;
     }
+
+    //hw
+    document.getElementById('get-form').onsubmit = (event) => {
+        // preventDefault() stops the browser's default behavior of
+        // sending the form data and refreshing the page
+        event.preventDefault();
+
+        getFilteredItems(event);
+        
+        return false;
+    }
+}
+//hw
+function getFilteredItems () {
+    fetch(`http://40.77.29.228/get_filtered_todont?priority=${id("filter").value}`, {
+        method: 'GET'
+    }).then( res => {
+        return res.json();
+    }).then( data => {
+        // log the data
+        console.log(data);
+        // overwrite local_items with the array of todont items
+        // recieved from the server
+        local_items = data.filtered_items;
+        // render the list of items received from the server
+        render();
+    }).catch( err => {
+        console.log(err);
+    });
 }
 
 async function processFormSubmit(event) {
@@ -34,7 +63,7 @@ async function processFormSubmit(event) {
             priority: priority
         };
         local_items.push(data);
-        fetch('http://65.52.233.112/add_todont', {
+        fetch('http://40.77.29.228/add_todont', {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {"Content-Type": "application/json"}
@@ -62,7 +91,7 @@ function render() {
 }
 
 function getTodontItems () {
-    fetch('http://65.52.233.112/todont_items', {
+    fetch('http://40.77.29.228/todont_items', {
         method: 'GET'
     }).then( res => {
         return res.json();

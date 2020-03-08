@@ -19,6 +19,15 @@
                 </select>
                 <input type="submit" name='todo-item-submit' id='todo-item-submit' value='Add'>
         </form>
+
+        <form name='get-form' id='get-form' action='/get_filtered_todont' method='GET'>
+                <select id="filter" name="priorities">
+                        <option value="High">High</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Low">Low</option>
+                </select>
+                <input type="submit" name='get-form-submit' id='get-form-submit' value='Filter'>
+        </form>
 </section>
 <section id='todo-list-area'>
         <ul id='todo-list'>

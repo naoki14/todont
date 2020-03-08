@@ -29,6 +29,22 @@ app.get("/todont_list", (req, res) => {
     res.sendFile(path.join(__dirname, '/public/html/todont.html'));
 });
 
+//hw
+//action
+app.get("/get_filtered_todont", (req, res) => {
+    const priority = req.query.priority;
+    Todont.getFiltered(priority)
+        .then( (rows) => {
+            console.log(rows);
+            // remember to change index.js
+            res.send(JSON.stringify({filtered_items: rows}));
+        })
+        .catch( err => {
+            console.error(err);
+            res.sendStatus(500);
+        })
+});
+
 app.get("/todont_items", (req, res) => {
     Todont.getAll()
         .then( (rows) => {

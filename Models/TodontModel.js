@@ -25,6 +25,13 @@ class TodontModel {
             'SELECT text, priority FROM todonts'
         );
     }
+
+    getFiltered(priority){
+        return this.DAO.all(
+            'SELECT text, priority FROM todonts WHERE priority = (?)',
+            [priority]
+        );
+    }
 }
   
 module.exports = TodontModel;

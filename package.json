@@ -11,5 +11,13 @@
   "dependencies": {
     "express": "^4.17.1",
     "sqlite3": "^4.1.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naoki14/todont.git"
+  },
+  "bugs": {
+    "url": "https://github.com/naoki14/todont/issues"
+  },
+  "homepage": "https://github.com/naoki14/todont#readme"
 }
