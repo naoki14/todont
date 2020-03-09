@@ -9,6 +9,7 @@
   "author": "Chris Saldivar",
   "license": "ISC",
   "dependencies": {
+    "argon2": "^0.26.1",
     "express": "^4.17.1",
     "sqlite3": "^4.1.1"
   },
